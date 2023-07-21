@@ -24,7 +24,7 @@ import argparse
 
 
 from dronekit import connect, VehicleMode, LocationGlobalRelative, Command, LocationGlobal
-from opencv.lib_aruco_pose import *
+from lib_aruco_pose import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--connect', default = '')
