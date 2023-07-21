@@ -85,6 +85,18 @@ def check_angle_descend(angle_x, angle_y, angle_desc):
 #-------------- CONNECTION  
 #--------------------------------------------------    
 #-- Connect to the vehicle
+
+#--- Get the camera calibration path
+# Find full directory path of this script, used for loading config and other files
+cwd                 = path.dirname(path.abspath(__file__))
+calib_path          = ""
+with open(calib_path + 'camera.json', 'r') as json_file:
+    camera_data = json.load(json_file)
+camera_distortion = np.array(camera_data["dist"])
+camera_matrix = np.array(camera_data["mtx"])                                       
+aruco_tracker       = ArucoSingleTracker(id_to_find=id_to_find, marker_size=marker_size, dict="DICT_5X5_50", show_video=True, 
+                camera_matrix=camera_matrix, camera_distortion=camera_distortion)
+
 print('Connecting...')
 vehicle = connect(args.connect)  
 
@@ -105,19 +117,6 @@ freq_send       = 1 #- Hz
 land_alt_cm         = 50.0
 angle_descend       = 20*deg_2_rad
 land_speed_cms      = 30.0
-
-
-
-#--- Get the camera calibration path
-# Find full directory path of this script, used for loading config and other files
-cwd                 = path.dirname(path.abspath(__file__))
-calib_path          = cwd+"/../opencv/"
-with open(calib_path + 'camera.json', 'r') as json_file:
-    camera_data = json.load(json_file)
-camera_distortion = np.array(camera_data["dist"])
-camera_matrix = np.array(camera_data["mtx"])                                       
-aruco_tracker       = ArucoSingleTracker(id_to_find=id_to_find, marker_size=marker_size, dict="DICT_5X5_50", show_video=True, 
-                camera_matrix=camera_matrix, camera_distortion=camera_distortion)
                 
                 
 time_0 = time.time()
